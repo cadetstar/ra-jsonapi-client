@@ -35,7 +35,6 @@ export default ({ retryCount }) => {
     axios.interceptors.response.use(
       null,
       error => {
-        console.log(error);
         if (!retryCounter[error.config.url]) {
           retryCounter[error.config.url] = 0
         }
@@ -43,6 +42,7 @@ export default ({ retryCount }) => {
         if (retryCounter[error.config.url] < retryCount) {
           return axios(error.config)
         } else {
+          delete retryCounter[error.config.url]
           return Promise.reject(error)
         }
       }

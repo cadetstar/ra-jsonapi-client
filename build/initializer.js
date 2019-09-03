@@ -45,7 +45,6 @@ exports.default = function (_ref) {
     var retryCounter = {};
 
     _axios2.default.interceptors.response.use(null, function (error) {
-      console.log(error);
       if (!retryCounter[error.config.url]) {
         retryCounter[error.config.url] = 0;
       }
@@ -53,6 +52,7 @@ exports.default = function (_ref) {
       if (retryCounter[error.config.url] < retryCount) {
         return (0, _axios2.default)(error.config);
       } else {
+        delete retryCounter[error.config.url];
         return Promise.reject(error);
       }
     });
