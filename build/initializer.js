@@ -8,10 +8,6 @@ var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _axiosRetry = require('axios-retry');
-
-var _axiosRetry2 = _interopRequireDefault(_axiosRetry);
-
 var _errors = require('./errors');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -46,7 +42,20 @@ exports.default = function (_ref) {
 
   // Response interceptors
   if (retryCount > 0) {
-    (0, _axiosRetry2.default)(_axios2.default, { retries: retryCount });
+    var retryCounter = {};
+
+    _axios2.default.interceptors.response.use(null, function (error) {
+      console.log(error);
+      if (!retryCounter[error.config.url]) {
+        retryCounter[error.config.url] = 0;
+      }
+      retryCounter[error.config.url] += 1;
+      if (retryCounter[error.config.url] < retryCount) {
+        return (0, _axios2.default)(error.config);
+      } else {
+        return Promise.reject(error);
+      }
+    });
   }
   _axios2.default.interceptors.response.use(function (response) {
     return response;

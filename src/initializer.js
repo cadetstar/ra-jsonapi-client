@@ -1,5 +1,4 @@
 import axios from 'axios';
-import axiosRetry from 'axios-retry';
 import { HttpError } from './errors';
 
 // Handle HTTP errors.
@@ -31,7 +30,23 @@ export default ({ retryCount }) => {
 
   // Response interceptors
   if (retryCount > 0) {
-    axiosRetry(axios, { retries: retryCount })
+    const retryCounter = {}
+
+    axios.interceptors.response.use(
+      null,
+      error => {
+        console.log(error);
+        if (!retryCounter[error.config.url]) {
+          retryCounter[error.config.url] = 0
+        }
+        retryCounter[error.config.url] += 1
+        if (retryCounter[error.config.url] < retryCount) {
+          return axios(error.config)
+        } else {
+          return Promise.reject(error)
+        }
+      }
+    )
   }
   axios.interceptors.response.use(
     response => response,
