@@ -16,7 +16,6 @@ import { NotImplementedError } from './errors';
 import init from './initializer';
 
 // Set HTTP interceptors.
-init();
 
 /**
  * Maps react-admin queries to a JSONAPI REST API
@@ -30,6 +29,9 @@ init();
  * @returns {Promise} the Promise for a data response
  */
 export default (apiUrl, userSettings = {}) => (type, resource, params) => {
+  const { retryCount } = userSettings;
+  init({ retryCount });
+
   let url = '';
   const settings = merge(defaultSettings, userSettings);
 
