@@ -150,6 +150,12 @@ exports.default = function (apiUrl) {
           // Add the reference id to the filter params.
           _query2['filter[' + params.target + ']'] = params.id;
 
+          // Add sort parameter
+          if (params.sort && params.sort.field) {
+            var _prefix = params.sort.order === 'ASC' ? '' : '-';
+            _query2.sort = '' + _prefix + params.sort.field;
+          }
+
           url = apiUrl + '/' + resource + '?' + (0, _qs.stringify)(_query2);
           break;
         }
