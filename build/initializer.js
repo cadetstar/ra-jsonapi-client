@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -22,11 +24,15 @@ exports.default = function (_ref) {
     var username = localStorage.getItem('username');
     var password = localStorage.getItem('password');
 
-    var newConfig = config;
+    var newConfig = _extends({}, config);
 
     // When a 'token' is available set as Bearer token.
     if (token) {
       newConfig.headers.Authorization = 'Bearer ' + token;
+    }
+
+    if (config.headers && typeof config.headers === 'function') {
+      newConfig.headers = config.headers();
     }
 
     // When username and password are available use
