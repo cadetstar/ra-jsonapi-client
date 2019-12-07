@@ -51,6 +51,9 @@ exports.default = function (_ref) {
     var retryCounter = {};
 
     _axios2.default.interceptors.response.use(null, function (error) {
+      if (!error.config) {
+        return Promise.reject(error);
+      }
       if (!retryCounter[error.config.url]) {
         retryCounter[error.config.url] = 0;
       }

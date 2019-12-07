@@ -39,6 +39,9 @@ export default ({ retryCount }) => {
     axios.interceptors.response.use(
       null,
       error => {
+        if (!error.config) {
+          return Promise.reject(error)
+        }
         if (!retryCounter[error.config.url]) {
           retryCounter[error.config.url] = 0
         }
