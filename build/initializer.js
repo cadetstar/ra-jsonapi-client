@@ -66,6 +66,7 @@ exports.default = function (_ref) {
   _axios2.default.interceptors.response.use(function (response) {
     return response;
   }, function (error) {
+    console.log('Error is', error);
     var _error$response = error.response,
         status = _error$response.status,
         data = _error$response.data;

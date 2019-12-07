@@ -55,6 +55,7 @@ export default ({ retryCount }) => {
   axios.interceptors.response.use(
     response => response,
     (error) => {
+      console.log('Error is', error)
       const { status, data } = error.response;
 
       if (status < 200 || status >= 300) {
