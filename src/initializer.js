@@ -59,6 +59,9 @@ export default ({ retryCount }) => {
     response => response,
     (error) => {
       console.log('Error is', error)
+      if (!error.response) {
+        return Promise.reject(error)
+      }
       const { status, data } = error.response;
 
       if (status < 200 || status >= 300) {

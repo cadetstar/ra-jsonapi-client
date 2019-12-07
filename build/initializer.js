@@ -70,6 +70,9 @@ exports.default = function (_ref) {
     return response;
   }, function (error) {
     console.log('Error is', error);
+    if (!error.response) {
+      return Promise.reject(error);
+    }
     var _error$response = error.response,
         status = _error$response.status,
         data = _error$response.data;
