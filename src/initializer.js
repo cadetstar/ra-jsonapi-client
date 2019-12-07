@@ -17,6 +17,10 @@ export default ({ retryCount }) => {
         newConfig.headers.Authorization = `Bearer ${token}`;
       }
 
+      if (config.headers && (typeof config.headers === 'function')) {
+        newConfig.headers = config.headers()
+      }
+
       // When username and password are available use
       // as basic auth credentials.
       if (username && password) {
