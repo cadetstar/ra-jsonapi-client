@@ -10,7 +10,7 @@ export default ({ retryCount }) => {
       const username = localStorage.getItem('username');
       const password = localStorage.getItem('password');
 
-      const newConfig = config;
+      const newConfig = {...config};
 
       // When a 'token' is available set as Bearer token.
       if (token) {
