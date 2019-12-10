@@ -42,6 +42,10 @@ export default ({ retryCount }) => {
         if (!error.config) {
           return Promise.reject(error)
         }
+        if (error.response.status == 400) {
+          // Since 500s also are sometimes retry-able, we whitelist what we do not retry
+          return Promise.reject(error)
+        }
         if (!retryCounter[error.config.url]) {
           retryCounter[error.config.url] = 0
         }
@@ -58,7 +62,6 @@ export default ({ retryCount }) => {
   axios.interceptors.response.use(
     response => response,
     (error) => {
-      console.log('Error is', error)
       if (!error.response) {
         return Promise.reject(error)
       }
@@ -66,7 +69,7 @@ export default ({ retryCount }) => {
 
       if (status < 200 || status >= 300) {
         return Promise.reject(
-          new HttpError(data, status),
+          new HttpError(data, status, config),
         );
       }
 

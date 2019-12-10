@@ -8,10 +8,18 @@ export class NotImplementedError extends Error {
 }
 
 export class HttpError extends Error {
-  constructor(message, status) {
-    super(message);
+  constructor(data_or_message, status, config) {
+    super(data_or_message);
 
-    this.message = message;
+    if (typeof data_or_message == 'string') {
+      this.message = data_or_message
+    } else {
+      if (config.messageCreator) {
+        this.message = config.messageCreator(data_or_message)
+      } else {
+        this.message = data_or_message;
+      }
+    }
     this.status = status;
     this.name = 'HttpError';
   }
