@@ -54,6 +54,10 @@ exports.default = function (_ref) {
       if (!error.config) {
         return Promise.reject(error);
       }
+      if (error.response.status == 400) {
+        // Since 500s also are sometimes retry-able, we whitelist what we do not retry
+        return Promise.reject(error);
+      }
       if (!retryCounter[error.config.url]) {
         retryCounter[error.config.url] = 0;
       }
@@ -69,7 +73,6 @@ exports.default = function (_ref) {
   _axios2.default.interceptors.response.use(function (response) {
     return response;
   }, function (error) {
-    console.log('Error is', error);
     if (!error.response) {
       return Promise.reject(error);
     }
@@ -79,7 +82,7 @@ exports.default = function (_ref) {
 
 
     if (status < 200 || status >= 300) {
-      return Promise.reject(new _errors.HttpError(data, status));
+      return Promise.reject(new _errors.HttpError(data, status, config));
     }
 
     return Promise.reject(error);
