@@ -2,7 +2,7 @@ import axios from 'axios';
 import { HttpError } from './errors';
 
 // Handle HTTP errors.
-export default ({ retryCount }) => {
+export default ({ retryCount, messageCreator }) => {
   // Request interceptor
   axios.interceptors.request.use(
     (config) => {
@@ -69,7 +69,7 @@ export default ({ retryCount }) => {
 
       if (status < 200 || status >= 300) {
         return Promise.reject(
-          new HttpError(data, status, config),
+          new HttpError(data, status, messageCreator),
         );
       }
 

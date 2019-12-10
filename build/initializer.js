@@ -16,7 +16,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Handle HTTP errors.
 exports.default = function (_ref) {
-  var retryCount = _ref.retryCount;
+  var retryCount = _ref.retryCount,
+      messageCreator = _ref.messageCreator;
 
   // Request interceptor
   _axios2.default.interceptors.request.use(function (config) {
@@ -82,7 +83,7 @@ exports.default = function (_ref) {
 
 
     if (status < 200 || status >= 300) {
-      return Promise.reject(new _errors.HttpError(data, status, config));
+      return Promise.reject(new _errors.HttpError(data, status, messageCreator));
     }
 
     return Promise.reject(error);

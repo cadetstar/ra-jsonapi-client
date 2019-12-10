@@ -29,7 +29,7 @@ var NotImplementedError = exports.NotImplementedError = function (_Error) {
 var HttpError = exports.HttpError = function (_Error2) {
   _inherits(HttpError, _Error2);
 
-  function HttpError(data_or_message, status, config) {
+  function HttpError(data_or_message, status, messageCreator) {
     _classCallCheck(this, HttpError);
 
     var _this2 = _possibleConstructorReturn(this, (HttpError.__proto__ || Object.getPrototypeOf(HttpError)).call(this, data_or_message));
@@ -37,8 +37,8 @@ var HttpError = exports.HttpError = function (_Error2) {
     if (typeof data_or_message == 'string') {
       _this2.message = data_or_message;
     } else {
-      if (config.messageCreator) {
-        _this2.message = config.messageCreator(data_or_message);
+      if (messageCreator) {
+        _this2.message = messageCreator(data_or_message);
       } else {
         _this2.message = data_or_message;
       }
