@@ -29,8 +29,8 @@ import init from './initializer';
  * @returns {Promise} the Promise for a data response
  */
 export default (apiUrl, userSettings = {}) => (type, resource, params) => {
-  const { retryCount } = userSettings;
-  init({ retryCount });
+  const { retryCount, messageCreator = null } = userSettings;
+  init({ retryCount, messageCreator });
 
   let url = '';
   const settings = merge(defaultSettings, userSettings);

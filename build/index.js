@@ -46,9 +46,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (apiUrl) {
   var userSettings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   return function (type, resource, params) {
-    var retryCount = userSettings.retryCount;
+    var retryCount = userSettings.retryCount,
+        _userSettings$message = userSettings.messageCreator,
+        messageCreator = _userSettings$message === undefined ? null : _userSettings$message;
 
-    (0, _initializer2.default)({ retryCount: retryCount });
+    (0, _initializer2.default)({ retryCount: retryCount, messageCreator: messageCreator });
 
     var url = '';
     var settings = (0, _deepmerge2.default)(_defaultSettings2.default, userSettings);
