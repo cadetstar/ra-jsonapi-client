@@ -7,11 +7,15 @@ export default ({ retryCount, messageCreator }) => {
   axios.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('token');
+      const session_as_token = localStorage.getItem('sessionToken');
       const username = localStorage.getItem('username');
       const password = localStorage.getItem('password');
 
       const newConfig = {...config};
 
+      if (session_as_token) {
+        newConfig.headers.Authorization = `Session ${session_as_token}`;
+      }
       // When a 'token' is available set as Bearer token.
       if (token) {
         newConfig.headers.Authorization = `Bearer ${token}`;

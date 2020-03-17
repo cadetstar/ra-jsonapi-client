@@ -22,11 +22,15 @@ exports.default = function (_ref) {
   // Request interceptor
   _axios2.default.interceptors.request.use(function (config) {
     var token = localStorage.getItem('token');
+    var session_as_token = localStorage.getItem('sessionToken');
     var username = localStorage.getItem('username');
     var password = localStorage.getItem('password');
 
     var newConfig = _extends({}, config);
 
+    if (session_as_token) {
+      newConfig.headers.Authorization = 'Session ' + session_as_token;
+    }
     // When a 'token' is available set as Bearer token.
     if (token) {
       newConfig.headers.Authorization = 'Bearer ' + token;
